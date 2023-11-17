@@ -40,6 +40,7 @@ jobs:
                     if [[ ! $branch_name =~ ^release/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
                         echo "Error: The semantic version rule must be followed. For example v1.2.3"
                         exit 1
+                    fi
                 echo "branchType=release" >> "$GITHUB_OUTPUT"
                 semantic_version=$(echo "$branch_name" | grep -oP '\b\d+\.\d+\.\d+\b')
                 echo "branchVersion=$semantic_version" >> "$GITHUB_OUTPUT"
