@@ -60,4 +60,4 @@ jobs:
       - env:
           OUTPUT1: ${{needs.checkBranch.outputs.branchType}}
           OUTPUT2: ${{needs.checkBranch.outputs.branchVersion}}
-        run: echo "$OUTPUT1 $OUTPUT2
+        run: echo "$OUTPUT1 $OUTPUT2"
