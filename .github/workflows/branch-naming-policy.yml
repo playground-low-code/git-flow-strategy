@@ -41,7 +41,8 @@ jobs:
                         echo "Error: The semantic version rule must be followed. For example v1.2.3"
                     exit 1
                 echo "branchType=release" >> "$GITHUB_OUTPUT"
-                echo "branchVersion=1.2.3" >> "$GITHUB_OUTPUT"
+                semantic_version=$(echo "$branch_name" | grep -oP '\b\d+\.\d+\.\d+\b')
+                echo "branchVersion=$semantic_version" >> "$GITHUB_OUTPUT"
                 exit 0
                 fi
             elif [[ $branch_name =~ ^main ]]; then
