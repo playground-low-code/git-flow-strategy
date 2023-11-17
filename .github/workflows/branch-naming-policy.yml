@@ -19,7 +19,7 @@ jobs:
 
     outputs:
         branchType: ${{ steps.branch.outputs.branchType }}
-        branchVersion:  ${{ steps.branch.outputs.version }}
+        branchVersion:  ${{ steps.branch.outputs.branchVersion }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -32,7 +32,7 @@ jobs:
             if [[ $branch_name =~ ^feature/.*$ ]]; then
                 echo "Feature Branch Detected."
                 echo "branchType=feature" >> "$GITHUB_OUTPUT"
-                echo "branchVersion=-" >> "$GITHUB_OUTPUT"
+                echo "branchVersion=1.2.3" >> "$GITHUB_OUTPUT"
                 exit 0
             elif [[ $branch_name =~ ^release/.*$ ]]; then
                 echo "Release Branch Detected."
