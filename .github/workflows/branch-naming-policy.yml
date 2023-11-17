@@ -25,6 +25,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Branch Name Pattern Policy
         run: |
+            branch_name=${{ github.ref_name }}
             if [[ $branch_name =~ ^feature/.*$ ]]; then
             echo "Feature Branch Detected."
             elif [[ $branch_name =~ ^release/.*$ ]]; then
