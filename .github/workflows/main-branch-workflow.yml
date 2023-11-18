@@ -49,5 +49,6 @@ jobs:
         run: |
             # Replace 'main' with the branch you want to lock
             # Lock the branch
-            git tag Locked $BRANCH_NAME
+            git checkout $BRANCH_NAME
+            git tag Locked
             git push origin $BRANCH_NAME
