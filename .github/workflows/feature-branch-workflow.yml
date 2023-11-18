@@ -37,7 +37,7 @@ jobs:
             feature_name=""
             for part in "${parts[@]}"; do
             # Büyük harfe çevirme ve boşluk ekleyerek birleştirme
-            feature_name+="$(echo $part | tr '[:lower:]' '[:upper:]') "
+            feature_name+="$(echo $part | tr '-' ' ' | tr '[:lower:]' '[:upper:]') "
             done
 
             # Son boşluğu temizleme
