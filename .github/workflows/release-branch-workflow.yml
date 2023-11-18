@@ -34,10 +34,10 @@ jobs:
                 echo "Error: The semantic version rule must be followed. For example v1.2.3"
                 exit 1
             fi
-            build_number=${{github.run_number}}
-            suffix="-rc."
+            timestamp=$(date +'%Y%m%d%H%M%S')
+            rc_package_number="rc-${timestamp}"
             semantic_version=$(echo "$branch_name" | sed -n 's/.*\/v\([0-9]*\.[0-9]*\.[0-9]*\)/\1/p')
-            echo "version=${semantic_version}${suffic}${build_number}" >> "$GITHUB_OUTPUT"
+            echo "version=${semantic_version}${rc_package_number}" >> "$GITHUB_OUTPUT"
             exit 0
   
   debug:
