@@ -1,0 +1,53 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Branch Operations
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches:
+      - feature/*
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  checkBranch:
+    name: Branch Validation
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    outputs:
+        feature-name: ${{ steps.branch.outputs.feature-name }}
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      # Runs a set of commands using the runners shell
+      - name: Branch Name Pattern Policy
+        id: branch
+        run: |
+            branch_name=${{ github.ref_name }}
+            # Ayırma işlemi
+            IFS='/' read -ra parts <<< "$branch_name"
+
+            # Feature Name'i oluşturma
+            feature_name=""
+            for part in "${parts[@]}"; do
+            # Büyük harfe çevirme ve boşluk ekleyerek birleştirme
+            feature_name+="$(echo $part | tr '[:lower:]' '[:upper:]') "
+            done
+
+            # Son boşluğu temizleme
+            feature_name="${feature_name%" "}"
+            echo "feature-name=$feature_name" >> "$GITHUB_OUTPUT"
+  debug:
+    runs-on: ubuntu-latest
+    needs: checkBranch
+    steps:
+      - env:
+          OUTPUT1: ${{needs.checkBranch.outputs.branchType}}
+          OUTPUT2: ${{needs.checkBranch.outputs.branchVersion}}
+        run: echo "$OUTPUT1 $OUTPUT2"
