@@ -6,10 +6,8 @@ name: Branch Operations
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: 
-      - '!main'
-      - '!release/*'
-      - '!feature/*'
+    branches:
+      - release/*
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -22,8 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-        branchType: ${{ steps.branch.outputs.branchType }}
-        branchVersion:  ${{ steps.branch.outputs.branchVersion }}
+        version:  ${{ steps.branch.outputs.branchVersion }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -31,6 +28,22 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Branch Name Pattern Policy
         id: branch
-        run: |   
-              echo "::error:: Only Feature and Release branches can be created."
-              exit 1
+        run: |
+            branch_name=${{ github.ref_name }}
+            if [[ ! $branch_name =~ ^release/v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                echo "Error: The semantic version rule must be followed. For example v1.2.3"
+                exit 1
+            fi
+            build_number = ${{github.run_number}}
+            suffix = "-rc."
+            semantic_version=$(echo "$branch_name" | sed -n 's/.*\/v\([0-9]*\.[0-9]*\.[0-9]*\)/\1/p')
+            echo "version=${semantic_version}${suffic}${build_number}" >> "$GITHUB_OUTPUT"
+            exit 0
+  
+  debug:
+    runs-on: ubuntu-latest
+    needs: checkBranch
+    steps:
+      - env:
+          OUTPUT2: ${{needs.checkBranch.outputs.version}}
+        run: echo "$OUTPUT2"
