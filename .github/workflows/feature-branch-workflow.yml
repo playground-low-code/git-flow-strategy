@@ -48,6 +48,5 @@ jobs:
     needs: checkBranch
     steps:
       - env:
-          OUTPUT1: ${{needs.checkBranch.outputs.branchType}}
-          OUTPUT2: ${{needs.checkBranch.outputs.branchVersion}}
-        run: echo "$OUTPUT1 $OUTPUT2"
+          OUTPUT1: ${{needs.checkBranch.outputs.feature-name}}
+        run: echo "$OUTPUT1"
