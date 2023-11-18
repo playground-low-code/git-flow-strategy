@@ -1,10 +1,9 @@
-# This is a basic workflow to help you get started with Actions
-
+# Defines the workflow name
 name: Branch Operations
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Triggers the workflow on push or pull request events but only for the "feature" branch
   push:
     branches:
       - feature/*
@@ -13,40 +12,61 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # This workflow contains a single job named "checkBranch"
   checkBranch:
     name: Branch Validation
-    # The type of runner that the job will run on
+    # Specifies the type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Defines outputs for the job
     outputs:
-        feature-name: ${{ steps.branch.outputs.feature-name }}
+      feature-name: ${{ steps.branch.outputs.feature-name }}
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      # Runs a set of commands using the runners shell
+
+      # Runs a set of commands using the runner's shell
       - name: Branch Name Pattern Policy
         id: branch
         run: |
+            # Create the Feature Name
+            feature_name=""
+
+            # Get the branch name
             branch_name=${{ github.ref_name }}
-            # Ayırma işlemi
+
+            # Split the branch name
             IFS='/' read -ra parts <<< "$branch_name"
 
-            # Feature Name'i oluşturma
-            feature_name=""
             for part in "${parts[@]}"; do
-            # Büyük harfe çevirme ve boşluk ekleyerek birleştirme
-            feature_name+="$(echo "$part" | tr '-' ' ' | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}') "
+                # Convert to uppercase and concatenate with spaces
+                feature_name+="$(echo "$part" | tr '-' ' ' | awk '{print toupper(substr($0,1,1)) tolower(substr($0,2))}') "
             done
 
-            # Son boşluğu temizleme
+            # Remove the trailing space
             feature_name="${feature_name%" "}"
+
+            # Check the length of the string
+            if [ ${#input_string} -lt 5 ]; then
+                echo "::error:: Feature name cannot be less than 5 characters."
+                exit 1
+            fi
+
+            # Write the output to a file
             echo "feature-name=$feature_name" >> "$GITHUB_OUTPUT"
+
+  # Adds a debug job
   debug:
     runs-on: ubuntu-latest
+
+    # Depends on the checkBranch job
     needs: checkBranch
+
     steps:
+      # Defines an environment variable
       - env:
           OUTPUT1: ${{needs.checkBranch.outputs.feature-name}}
+        # Prints the output for debugging purposes
         run: echo "$OUTPUT1"
