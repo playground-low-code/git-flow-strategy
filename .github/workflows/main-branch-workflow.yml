@@ -32,6 +32,8 @@ jobs:
         run: |
             MERGED_BRANCH=$(git branch -r --contains ${{ github.event.before }} | grep -o 'origin/.*' | tail -n1 | sed 's|origin/||')
             echo "branch=${MERGED_BRANCH}" >> "$GITHUB_OUTPUT"
+            echo "${GITHUB_BASE_REF}"
+            echo "${GITHUB_HEAD_REF}"
   
   debug:
     runs-on: ubuntu-latest
