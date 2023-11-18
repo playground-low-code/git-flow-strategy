@@ -35,7 +35,7 @@ jobs:
                 exit 1
             fi
             timestamp=$(date +'%Y%m%d%H%M%S')
-            rc_package_number="rc-${timestamp}"
+            rc_package_number="-rc-${timestamp}"
             semantic_version=$(echo "$branch_name" | sed -n 's/.*\/v\([0-9]*\.[0-9]*\.[0-9]*\)/\1/p')
             echo "version=${semantic_version}${rc_package_number}" >> "$GITHUB_OUTPUT"
             exit 0
