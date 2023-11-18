@@ -33,5 +33,5 @@ jobs:
       - name: Branch Name Pattern Policy
         id: branch
         run: |   
-            echo "::Error: Only Feature and Release branches can be created."
+            echo "::error:: Only Feature and Release branches can be created."
             exit 1
