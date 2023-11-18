@@ -54,4 +54,4 @@ jobs:
             git fetch
             git checkout $BRANCH_NAME
             git tag Locked
-            git push origin $BRANCH_NAME
+            git push origin --tags
