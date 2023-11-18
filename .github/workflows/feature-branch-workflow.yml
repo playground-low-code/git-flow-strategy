@@ -49,7 +49,7 @@ jobs:
             feature_name="${feature_name%" "}"
 
             # Check the length of the string
-            if [ ${#input_string} -lt 5 ]; then
+            if [ ${#feature_name} -lt 5 ]; then
                 echo "::error:: Feature name cannot be less than 5 characters."
                 exit 1
             fi
